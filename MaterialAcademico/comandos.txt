@@ -1,0 +1,37 @@
+---------------- CREACION DEL REGISTRY ----------------
+
+1. Crear certificados:
+  openssl req -newkey rsa:4096 -nodes -sha256 -keyout `pwd`/docker_data/certs/domain.key -x509 -days 365 -out `pwd`/docker_data/certs/domain.crt
+
+2. Crear el docker-registry:
+  docker run -d \                                   
+    --restart=always \
+    --name registry \
+    -v `pwd`/docker_data/certs:/certs \
+    -e REGISTRY_HTTP_ADDR=0.0.0.0:443 \
+    -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+    -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+    -p 443:443 \
+    registry
+
+3. Revisar imagenes:
+  docker images
+
+4. renombrar las imagenes para poder subirlas a nuestro registry
+  docker tag imagen swanregistry.icesi.co/my-imagen
+
+5. Subir las imagenes al registry
+  docker push swanregistry.icesi.co/my-imagen
+
+---------------- PERMISOS EN CLIENTES ----------------
+
+1. Copia del certificado:
+  scp -r domain.crt ipcliente:~
+
+2. Conectarse al cliente y realizar lo siguiente:
+	a. Crear el directorio del registry en la carpeta de certificados de docker.
+	  sudo mkdir -p /etc/docker/certs.d/swanregistry.icesi.co:443
+	b. Copiar el certificado en la carpeta que se creo en el paso anterior.
+	  sudo cp -rf ~/domain.crt /etc/docker/certs.d/swanregistry.icesi.co:443/
+
+
