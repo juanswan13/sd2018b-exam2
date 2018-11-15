@@ -18,32 +18,33 @@ def repository_merged():
         json_image_response = requests.get(json_image_url)
         images_json = json.loads(json_image_response.content)
 
-        service_name = images_json["service_name"]
-        image_type = images_json["type"]
-        image_version = images_json["version"]
-        if image_type == 'Docker':
-            image_url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam2/' + pull_id + '/' + service_name + '/Dockerfile'
-            file_response=requests.get(image_url)
-            file = open("Dockerfile","w")
-            file.write(str(file_response.content, 'utf-8'))
-            file.close()
-            image_tag = domain + '/' + service_name + ':' + image_version
+        for service in images_json["images"]:
+            service_name = service["service_name"]
+            image_type = service["type"]
+            image_version = service["version"]
+            if image_type == 'Docker':
+                image_url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam2/' + pull_id + '/' + service_name + '/Dockerfile'
+                file_response=requests.get(image_url)
+                file = open("Dockerfile","w")
+                file.write(str(file_response.content, 'utf-8'))
+                file.close()
+                image_tag = domain + '/' + service_name + ':' + image_version
 
-            client = docker.from_env()
-            client.images.build(path="./", tag=image_tag)
-            client.images.push(image_tag)
-            client.images.remove(image=image_tag, force=True)
-            result = {'command_return': image_tag}
-                        
-        elif image_type == 'AMI':
-            image_url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam2/' + pull_id + '/' + service_name + '/AMI'
-            file_response=requests.get(image_url)
-            file = open("AMI","w")
-            file.write(str(file_response.content, 'utf-8'))
-            file.close()
-            image_tag = domain + '/' + service_name + ':' + image_version
-        else:
-            result = {'command_return': 'ERROR: JSON does not have a correct format.'}
+                client = docker.from_env()
+                client.images.build(path="./", tag=image_tag)
+                client.images.push(image_tag)
+                client.images.remove(image=image_tag, force=True)
+                result = {'command_return': image_tag}
+
+            elif image_type == 'AMI':
+                image_url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam2/' + pull_id + '/' + service_name + '/AMI'
+                file_response=requests.get(image_url)
+                file = open("AMI","w")
+                file.write(str(file_response.content, 'utf-8'))
+                file.close()
+                image_tag = domain + '/' + service_name + ':' + image_version
+            else:
+                result = {'command_return': 'ERROR: JSON does not have a correct format.'}
 
         result = {'command_return': ''}
     else:
