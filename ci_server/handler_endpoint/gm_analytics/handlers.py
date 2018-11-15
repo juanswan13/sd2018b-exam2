@@ -25,7 +25,7 @@ def repository_merged():
             if image_type == 'Docker':
                 image_url = 'https://raw.githubusercontent.com/juanswan13/sd2018b-exam2/' + pull_id + '/' + service_name + '/Dockerfile'
                 file_response=requests.get(image_url)
-                file = open("Dockerfile","w")
+                file = open("/data/Dockerfile","w")
                 file.write(str(file_response.content, 'utf-8'))
                 file.close()
                 image_tag = domain + '/' + service_name + ':' + image_version

@@ -2,7 +2,6 @@ version: '3'
 services:
     swan-registry.icesi.edu.co:
         image: registry:2
-        restart: always
         container_name: swan-registry.icesi.edu.co
         volumes:
             - './docker_data/certs:/certs'
@@ -14,9 +13,9 @@ services:
             - '443:443'
     ci_server_swan:
         build: ci_server
-        image: ci_server_swan:latest
-        restart: always
         container_name: ci_server_swan
+        volumes:
+            - './ci_server/data:/data'
         environment:
             - 'CI_SERVER_HTTP_ADDR=0.0.0.0:8080'
         ports:
