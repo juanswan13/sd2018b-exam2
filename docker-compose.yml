@@ -14,8 +14,6 @@ services:
     ci_server_swan:
         build: ci_server
         container_name: ci_server_swan
-        volumes:
-            - './ci_server/data:/data'
         environment:
             - 'CI_SERVER_HTTP_ADDR=0.0.0.0:8080'
         ports:
