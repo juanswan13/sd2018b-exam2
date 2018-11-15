@@ -1,12 +1,12 @@
-FROM centos/python-36-centos7 
+FROM centos/python-36-centos7
 
-RUN pip3.6 install connexion
-RUN pip3.6 install fabric
+RUN pip3.6 install --upgrade pip
+RUN pip3.6 install connexion[swagger-ui]
+
+
 
 COPY ./handler_endpoint /handler_endpoint
 
 WORKDIR /handler_endpoint
 
-RUN ./deploy.sh
-
-
+CMD ./deploy.sh

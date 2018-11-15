@@ -5,10 +5,10 @@ info:
   version: "0.1.0"
 
 paths:
-  /ciserver/repository/changed:
+  /ciserver/repository/merged:
     post:
       x-swagger-router-controller: gm_analytics
-      operationId: handlers.repository_changed
+      operationId: handlers.repository_merged
       summary: The repository has changed..
       responses:
         200:
@@ -19,4 +19,3 @@ paths:
               command_return:
                 type: string
                 description: User information
-

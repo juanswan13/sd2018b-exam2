@@ -1,9 +1,9 @@
 version: '3'
 services:
-    registry:
+    swan-registry.icesi.edu.co:
         image: registry:2
         restart: always
-        container_name: registry
+        container_name: swan-registry.icesi.edu.co
         volumes:
             - './docker_data/certs:/certs'
         environment:
@@ -12,3 +12,20 @@ services:
             - REGISTRY_HTTP_TLS_KEY=/certs/domain.key
         ports:
             - '443:443'
+    ci_server_swan:
+        build: ci_server
+        image: ci_server_swan:latest
+        restart: always
+        container_name: ci_server_swan
+        environment:
+            - 'CI_SERVER_HTTP_ADDR=0.0.0.0:8080'
+        ports:
+            - '8080:8080'
+    ngrok:
+        image: wernight/ngrok
+        ports:
+            - 0.0.0.0:4040:4040
+        links:
+            - ci_server_swan
+        environment:
+            NGROK_PORT: ci_server_swan:8080
