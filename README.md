@@ -229,7 +229,7 @@ Then we go again to the PR and click to the buttom **merge**. this will make the
 * https://github.com/juanswan13/sd2018b-exam1/tree/jswan/exam1
 * https://raw.githubusercontent.com/abc1196/sd2018b-exam2/abueno/exam2/README.md
 
-[1]: images/deploy_diagram.png  
+[1]: images/01_diagrama_delivery.png
 [2]: images/docker-compose.png
 [3]: images/ngrok-running.png
 [4]: images/Webhook-creation.png  
